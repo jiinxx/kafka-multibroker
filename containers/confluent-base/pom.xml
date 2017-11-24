@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.urmo.demo</groupId>
+        <artifactId>containers</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>confluent-base</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <docker.image>jiinx/confluent-base</docker.image>
+        <docker.project.version>1.0</docker.project.version>
+        <scala.version>2.11</scala.version>
+        <python.version>2.7.9-1</python.version>
+        <python.pip.version>8.1.2</python.pip.version>
+        <confluent.version.major>3</confluent.version.major>
+        <confluent.version.minor>3</confluent.version.minor>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>${docker.image}</name>
+                            <build>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${docker.project.version}</tag>
+                                </tags>
+                                <dockerFileDir>.</dockerFileDir>
+                                <filter>@</filter>
+                            </build>
+                            <run>
+                                <skip>true</skip>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

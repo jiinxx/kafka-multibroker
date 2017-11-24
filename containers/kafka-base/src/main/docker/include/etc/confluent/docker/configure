@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -o nounset \
+    -o errexit \
+    -o verbose \
+    -o xtrace
+
+dub ensure KAFKA_ZOOKEEPER_CONNECT
+dub ensure KAFKA_ADVERTISED_LISTENERS
+
+# By default, LISTENERS is derived from ADVERTISED_LISTENERS by replacing
+# hosts with 0.0.0.0. This is good default as it ensures that the broker
+# process listens on all ports.
+if [[ -z "${KAFKA_LISTENERS-}" ]]
+then
+  export KAFKA_LISTENERS
+  KAFKA_LISTENERS=$(cub listeners "$KAFKA_ADVERTISED_LISTENERS")
+fi
+
+dub path /etc/kafka/ writable
+
+if [[ -z "${KAFKA_LOG_DIRS-}" ]]
+then
+  export KAFKA_LOG_DIRS
+  KAFKA_LOG_DIRS="/var/lib/kafka/data"
+fi
+
+dub template "/etc/confluent/docker/${COMPONENT}.properties.template" "/etc/${COMPONENT}/${COMPONENT}.properties"
+dub template "/etc/confluent/docker/log4j.properties.template" "/etc/${COMPONENT}/log4j.properties"
+dub template "/etc/confluent/docker/tools-log4j.properties.template" "/etc/${COMPONENT}/tools-log4j.properties"

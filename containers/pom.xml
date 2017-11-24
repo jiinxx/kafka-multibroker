@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.urmo.demo</groupId>
+        <artifactId>kafka-multi-broker</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>containers</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <properties>
+        <zookeeper.image.name>zookeeper</zookeeper.image.name>
+        <zookeeper.port>2181</zookeeper.port>
+        <kafkabase.docker.image>jiinx/kafka-base</kafkabase.docker.image>
+    </properties>
+
+    <modules>
+        <module>confluent-base</module>
+        <module>zookeeper</module>
+        <module>kafka-base</module>
+        <module>kafka-1</module>
+        <module>kafka-2</module>
+    </modules>
+</project>

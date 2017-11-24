@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>se.urmo.demo</groupId>
+        <artifactId>containers</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.urmo.demo</groupId>
+    <artifactId>kafka-2</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <docker.image>jiinx/kafka2</docker.image>
+        <docker.project.version>1.0.0</docker.project.version>
+        <kafka.image.name>kafka2</kafka.image.name>
+        <kafka.port>9093</kafka.port>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>${docker.image}</name>
+                            <alias>${kafka.image.name}</alias>
+                            <build>
+                                <from>jiinx/kafka-base</from>
+                            </build>
+                            <run>
+                                <namingStrategy>alias</namingStrategy>
+                                <hostname>${kafka.image.name}</hostname>
+                                <env>
+                                    <KAFKA_BROKER_ID>1</KAFKA_BROKER_ID>
+                                    <KAFKA_ZOOKEEPER_CONNECT>${zookeeper.image.name}:${zookeeper.port}</KAFKA_ZOOKEEPER_CONNECT>
+                                    <KAFKA_ADVERTISED_LISTENERS>PLAINTEXT://${kafka.image.name}:${kafka.port}</KAFKA_ADVERTISED_LISTENERS>
+                                    <KAFKA_DEFAULT_REPLICATION_FACTOR>1</KAFKA_DEFAULT_REPLICATION_FACTOR>
+                                    <KAFKA_LOG4J_ROOT_LOGLEVEL>debug</KAFKA_LOG4J_ROOT_LOGLEVEL>
+                                </env>
+                                <ports>
+                                    <port>${kafka.port}:${kafka.port}</port>
+                                </ports>
+                                <links>
+                                    <link>${zookeeper.image.name}</link>
+                                </links>
+                                <dependsOn>
+                                    <container>${zookeeper.image.name}</container>
+                                </dependsOn>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
